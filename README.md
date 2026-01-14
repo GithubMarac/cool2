@@ -42,15 +42,3 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
-
-
-Kako pokrenuti?
-Kreirajte .env datoteku prema uputama.
-
-Instalirajte dependencije: npm install prisma @prisma/client zod mime.
-
-Inicijalizirajte bazu: npx prisma db push.
-
-Dodajte testnu sliku u public/cdn/recepti/demo.jpg (kako bi CDN radio).
-
-Pokrenite: npm run dev.
