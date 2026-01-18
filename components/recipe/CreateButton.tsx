@@ -7,7 +7,7 @@ interface CreateRecipeButtonProps {
 export function CreateRecipeButton({ className }: CreateRecipeButtonProps) {
   return (
     <Link 
-      href="/recepies/new" 
+      href="/recipes/new" 
       className={`bg-orange-600 text-white px-6 py-2 rounded-full font-bold hover:bg-orange-700 transition shadow-lg ${className}`}
     >
       + Kreiraj novi recept

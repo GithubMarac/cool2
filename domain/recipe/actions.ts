@@ -1,11 +1,12 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 import fs from 'fs/promises';
 import path from 'path';
 import { recipeService } from './service';
 import { recipeSchema } from './schemas';
+import { redirect } from '@/i18n/routing';
+import { getLocale } from 'next-intl/server';
 
 export type FormState = {
   success: boolean;
@@ -20,7 +21,7 @@ async function saveImage(file: File, slug: string) {
 
   const buffer = Buffer.from(await file.arrayBuffer());
   const fileName = `${slug}-${Date.now()}${path.extname(file.name)}`;
-  const relativePath = `/recepies/${fileName}`;
+  const relativePath = `/recipes/${fileName}`;
   const fullPath = path.join(process.cwd(), 'public/cdn', relativePath);
 
   await fs.mkdir(path.dirname(fullPath), { recursive: true });
@@ -29,6 +30,8 @@ async function saveImage(file: File, slug: string) {
 }
 
 export async function createRecipeAction(prevState: FormState, formData: FormData): Promise<FormState> {
+  const locale = await getLocale();
+
   const rawData = {
     title: formData.get('title'),
     lead: formData.get('lead'),
@@ -55,7 +58,7 @@ export async function createRecipeAction(prevState: FormState, formData: FormDat
     const data = validated.data;
     const slug = data.title.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Date.now();
     
-    const imagePath = await saveImage(formData.get('image') as File, slug) || '/recepies/placeholder.jpg';
+    const imagePath = await saveImage(formData.get('image') as File, slug) || '/recipes/placeholder.jpg';
 
     await recipeService.create({
       ...data,
@@ -67,8 +70,8 @@ export async function createRecipeAction(prevState: FormState, formData: FormDat
     return { success: false, message: "Greška u bazi podataka." };
   }
 
-  revalidatePath('/recepies');
-  redirect('/recepies');
+  await revalidatePath('/recipes');
+  redirect({ href: '/recipes' }, { locale: locale });
 }
 
 export async function updateRecipeAction(
@@ -111,15 +114,20 @@ export async function updateRecipeAction(
     return { success: false, message: "Spremanje promjena nije uspjelo." };
   }
 
-  revalidatePath('/recepies');
-  revalidatePath(`/recepies/${slug}`);
-  redirect(`/recepies/${slug}`);
+  revalidatePath('/recipes');
+  revalidatePath(`/recipes/${slug}`);
+  redirect({
+      href: {
+        pathname: '/recipes/[slug]',
+        params: { slug: slug }
+      }
+    });
 }
 
 export async function deleteRecipeAction(slug: string) {
   try {
     await recipeService.delete(slug);
-    revalidatePath('/recepies');
+    revalidatePath('/recipes');
     return { success: true, message: "Obrisano." };
   } catch (error) {
     return { success: false, message: "Brisanje nije uspjelo." };

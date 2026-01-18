@@ -6,20 +6,20 @@ export const routing = defineRouting({
   defaultLocale: 'en',
   pathnames: {
     '/': '/',
-    '/recepies': {
-      en: '/recepies',
+    '/recipes': {
+      en: '/recipes',
       hr: '/recepti'
     },
-    '/recepies/new': {
-      en: '/recepies/new',
+    '/recipes/new': {
+      en: '/recipes/new',
       hr: '/recepti/novi'
     },
-    '/recepies/[slug]': {
-      en: '/recepies/[slug]',
+    '/recipes/[slug]': {
+      en: '/recipes/[slug]',
       hr: '/recepti/[slug]'
     },
-    '/recepies/[slug]/edit': {
-      en: '/recepies/[slug]/edit',
+    '/recipes/[slug]/edit': {
+      en: '/recipes/[slug]/edit',
       hr: '/recepti/[slug]/uredi'
     }
   }

@@ -4,7 +4,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
   const { locale } = await params;
 
   redirect({
-    href: '/recepies',
+    href: '/recipes',
     locale: locale
   });
 }

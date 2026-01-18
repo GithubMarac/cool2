@@ -21,7 +21,7 @@ export function RecipeCard({ recipe }: RecipeCardProps) {
   return (
     <Link 
       href={{
-        pathname: '/recepies/[slug]',
+        pathname: '/recipes/[slug]',
         params: { slug: recipe.slug }
       }} 
       className="group"
