@@ -3,7 +3,8 @@ import Image from 'next/image';
 import { getCdnUrl } from '@/lib/cdn';
 import { recipeService } from '@/domain/recipe/service';
 import {Link} from '@/i18n/routing';
-import DeleteButton from '../../../../components/DeleteButton';
+import { EditRecipeButton } from '@/components/recipe/EditButton';
+import DeleteButton from '@/components/recipe/DeleteButton';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }>}) {
   const { slug } = await params
@@ -41,16 +42,8 @@ export default async function RecipeDetail({ params }: { params: Promise<{ slug:
           className="object-cover"
         />
         <div className="absolute top-4 right-4 flex gap-3 z-10">
-        <Link 
-          href={{
-            pathname: '/recepies/[slug]/edit',
-            params: { slug: recipe.slug }
-          }} 
-          className="bg-white/90 text-gray-800 px-4 py-2 rounded hover:bg-white transition font-medium shadow-sm backdrop-blur-sm"
-        >
-          Uredi
-        </Link>
-           <DeleteButton slug={recipe.slug} />
+          <EditRecipeButton slug={recipe.slug} />
+          <DeleteButton slug={recipe.slug} />
          </div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
           <div className="container mx-auto px-4 pb-8 text-white">
@@ -64,7 +57,7 @@ export default async function RecipeDetail({ params }: { params: Promise<{ slug:
       </div>
 
       <div className="container mx-auto px-4 mt-8 grid grid-cols-1 md:grid-cols-3 gap-8">
-        {/* Lijevi stupac - Meta podaci i Sastojci */}
+        {/* Left column - Ingredients */}
         <div className="md:col-span-1 space-y-8">
           <div className="bg-orange-50 p-6 rounded-xl border border-orange-100">
             <h3 className="font-bold text-gray-800 mb-4 text-lg">Detalji pripreme</h3>
@@ -97,7 +90,7 @@ export default async function RecipeDetail({ params }: { params: Promise<{ slug:
           </div>
         </div>
 
-        {/* Desni stupac - Priprema */}
+        {/* Right Column - Preparation */}
         <div className="md:col-span-2">
           <h3 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-2">Priprema</h3>
           <div className="space-y-8">

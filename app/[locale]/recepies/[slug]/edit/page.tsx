@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { recipeService } from '@/domain/recipe/service';
 import { updateRecipeAction } from '@/domain/recipe/actions';
-import RecipeForm from '@/components/RecipeForm';
+import RecipeForm from '@/components/recipe/RecipeForm';
 
 export async function generateMetadata({ params }: Readonly<{ params: Promise<{ slug: string }> }>) {
   const { slug } = await params;

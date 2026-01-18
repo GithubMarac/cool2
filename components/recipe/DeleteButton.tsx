@@ -6,7 +6,7 @@ interface DeleteButtonProps {
   slug: string;
 }
 
-export default function DeleteButton({ slug }: DeleteButtonProps) {
+export default function DeleteRecipeButton({ slug }: DeleteButtonProps) {
   const handleDelete = async (e: React.FormEvent<HTMLFormElement>) => {
     if (!confirm('Jeste li sigurni da želite obrisati ovaj recept?')) {
       e.preventDefault();

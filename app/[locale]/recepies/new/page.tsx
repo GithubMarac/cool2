@@ -1,4 +1,4 @@
-import RecipeForm from '../../../../components/RecipeForm';
+import RecipeForm from '@/components/recipe/RecipeForm';
 import { createRecipeAction } from '@/domain/recipe/actions';
 
 export default function CreateRecipePage() {
