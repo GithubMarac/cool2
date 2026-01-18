@@ -1,17 +1,7 @@
 import { Link } from '@/i18n/routing';
 import Image from 'next/image';
 import { getCdnUrl } from '@/lib/cdn';
-
-interface Recipe {
-  id: string;
-  slug: string;
-  title: string;
-  imagePath: string;
-  category: string;
-  lead: string;
-  prepTime: number;
-  difficulty: string;
-}
+import { Recipe } from '@/domain/recipe/types';
 
 interface RecipeCardProps {
   recipe: Recipe;
