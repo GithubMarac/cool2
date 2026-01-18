@@ -13,8 +13,6 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ path
   const fileBuffer = fs.readFileSync(filePath);
   const ext = path.extname(filePath).toLowerCase();
 
-  console.log('✅ DATOTEKA PRONAĐENA, šaljem klijentu...');
-
   const mimeTypes: Record<string, string> = {
     '.jpg': 'image/jpeg',
     '.jpeg': 'image/jpeg',
