@@ -17,7 +17,7 @@ export async function GET(req: NextRequest, { params }: Params) {
 
     return NextResponse.json(recipe);
   } catch (error) {
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: error }, { status: 500 });
   }
 }
 
@@ -54,6 +54,6 @@ export async function DELETE(req: NextRequest, { params }: Params) {
 
     return new NextResponse(null, { status: 204 });
   } catch (error) {
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: error }, { status: 500 });
   }
 }

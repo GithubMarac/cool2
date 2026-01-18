@@ -31,7 +31,7 @@ export default function DeleteRecipeButton({ slug }: DeleteButtonProps) {
         setIsDeleting(false);
       }
     } catch (error) {
-      alert('Došlo je do neočekivane pogreške.');
+      alert(JSON.stringify(error));
       setIsDeleting(false);
     }
   };

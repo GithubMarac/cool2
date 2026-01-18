@@ -10,7 +10,7 @@ export interface Recipe {
   servings: number;
   ingredients: string[];
   steps: string[];
-  image?: any;
+  image?: string;
 }
 
 export type CreateRecipeInput = Omit<Recipe, 'id'>;

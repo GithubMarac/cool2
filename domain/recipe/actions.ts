@@ -5,6 +5,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { recipeService } from './service';
 import { recipeSchema } from './schemas';
+import { Recipe } from './types';
 
 export type FormState = {
   success: boolean;
@@ -38,7 +39,6 @@ export async function createRecipeAction(prevState: FormState, formData: FormDat
     difficulty: formData.get('difficulty'),
     ingredients: formData.getAll('ingredients'),
     steps: formData.getAll('steps'),
-    image: formData.get('image'),
   };
 
   const validated = recipeSchema.safeParse(rawData);
@@ -55,7 +55,8 @@ export async function createRecipeAction(prevState: FormState, formData: FormDat
     const data = validated.data;
     const slug = data.title.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Date.now();
     
-    const imagePath = await saveImage(formData.get('image') as File, slug) || '/recipes/placeholder.jpg';
+    const imageFile = formData.get('image') as File;
+    const imagePath = await saveImage(imageFile, slug) || '/recipes/placeholder.jpg';
 
     await recipeService.create({
       ...data,
@@ -99,11 +100,14 @@ export async function updateRecipeAction(
 
   try {
     const newImage = formData.get('image') as File;
-    let updateData = { ...validated.data };
+    
+    const updateData: Partial<Recipe> & typeof validated.data = { ...validated.data };
 
     if (newImage && newImage.size > 0) {
       const imagePath = await saveImage(newImage, slug);
-      if (imagePath) (updateData as any).imagePath = imagePath;
+      if (imagePath) {
+        updateData.imagePath = imagePath;
+      }
     }
 
     await recipeService.update(slug, updateData);
@@ -117,7 +121,7 @@ export async function updateRecipeAction(
       redirectTo: `/recipes/${slug}` 
     };
   } catch (error) {
-    return { success: false, message: "Spremanje promjena nije uspjelo." };
+    return { success: false, message: JSON.stringify(error) };
   }
 }
 

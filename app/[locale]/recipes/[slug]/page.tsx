@@ -2,7 +2,6 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { getCdnUrl } from '@/lib/cdn';
 import { recipeService } from '@/domain/recipe/service';
-import {Link} from '@/i18n/routing';
 import { EditRecipeButton } from '@/components/recipe/EditButton';
 import DeleteButton from '@/components/recipe/DeleteButton';
 

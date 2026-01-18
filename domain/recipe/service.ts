@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma';
 import { RecipeMapper } from './mapper';
 import { CreateRecipeInput, UpdateRecipeInput, Recipe } from './types';
+import { Prisma } from '@prisma/client';
 
 export const recipeService = {
   async findAll(): Promise<Recipe[]> {
@@ -14,21 +15,20 @@ export const recipeService = {
   },
 
   async create(input: CreateRecipeInput): Promise<Recipe> {
-    const { image, ...prismaData } = input;
+    const prismaData = RecipeMapper.toPersistence(input);
 
     const data = await prisma.recipe.create({
-      data: {
-        ...prismaData,
-        ...RecipeMapper.toPersistence(prismaData) as any
-      }
+      data: prismaData as Prisma.RecipeCreateInput
     });
     return RecipeMapper.toDomain(data);
   },
 
   async update(slug: string, input: UpdateRecipeInput): Promise<Recipe> {
+    const prismaData = RecipeMapper.toPersistence(input);
+    
     const data = await prisma.recipe.update({
       where: { slug },
-      data: RecipeMapper.toPersistence(input) as any
+      data: prismaData as Prisma.RecipeUpdateInput
     });
     return RecipeMapper.toDomain(data);
   },

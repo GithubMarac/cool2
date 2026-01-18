@@ -3,10 +3,10 @@
 import { useActionState, useState, useEffect } from 'react';
 import { FormState } from '@/domain/recipe/actions';
 import { Recipe } from '@/domain/recipe/types';
-import { useRouter } from '@/i18n/routing'; // Ensure this points to your i18n routing file
+import { useRouter } from '@/i18n/routing';
 
 interface RecipeFormProps {
-  action: (prevState: any, formData: FormData) => Promise<FormState>;
+  action: (prevState: FormState, formData: FormData) => Promise<FormState>;
   initialData?: Recipe;
   submitLabel?: string;
 }
