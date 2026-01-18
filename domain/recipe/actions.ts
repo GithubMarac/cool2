@@ -5,13 +5,12 @@ import fs from 'fs/promises';
 import path from 'path';
 import { recipeService } from './service';
 import { recipeSchema } from './schemas';
-import { redirect } from '@/i18n/routing';
-import { getLocale } from 'next-intl/server';
 
 export type FormState = {
   success: boolean;
   message: string;
   errors?: Record<string, string[]>;
+  redirectTo?: string;
 };
 
 async function saveImage(file: File, slug: string) {
@@ -30,8 +29,6 @@ async function saveImage(file: File, slug: string) {
 }
 
 export async function createRecipeAction(prevState: FormState, formData: FormData): Promise<FormState> {
-  const locale = await getLocale();
-
   const rawData = {
     title: formData.get('title'),
     lead: formData.get('lead'),
@@ -65,13 +62,13 @@ export async function createRecipeAction(prevState: FormState, formData: FormDat
       slug,
       imagePath,
     });
+
+    revalidatePath('/recipes');
+    return { success: true, message: "Recept kreiran!", redirectTo: '/recipes' };
   } catch (error) {
     console.error("DETALJNA PRISMA GREŠKA:", error);
     return { success: false, message: "Greška u bazi podataka." };
   }
-
-  await revalidatePath('/recipes');
-  redirect({ href: '/recipes' }, { locale: locale });
 }
 
 export async function updateRecipeAction(
@@ -110,26 +107,36 @@ export async function updateRecipeAction(
     }
 
     await recipeService.update(slug, updateData);
+
+    revalidatePath('/recipes');
+    revalidatePath(`/recipes/${slug}`);
+    
+    return { 
+      success: true, 
+      message: "Spremljeno!", 
+      redirectTo: `/recipes/${slug}` 
+    };
   } catch (error) {
     return { success: false, message: "Spremanje promjena nije uspjelo." };
   }
-
-  revalidatePath('/recipes');
-  revalidatePath(`/recipes/${slug}`);
-  redirect({
-      href: {
-        pathname: '/recipes/[slug]',
-        params: { slug: slug }
-      }
-    });
 }
 
-export async function deleteRecipeAction(slug: string) {
+export async function deleteRecipeAction(slug: string): Promise<FormState> {
   try {
     await recipeService.delete(slug);
+    
     revalidatePath('/recipes');
-    return { success: true, message: "Obrisano." };
+    
+    return { 
+      success: true, 
+      message: "Recept je uspješno obrisan.",
+      redirectTo: '/recipes' 
+    };
   } catch (error) {
-    return { success: false, message: "Brisanje nije uspjelo." };
+    console.error("Greška pri brisanju:", error);
+    return { 
+      success: false, 
+      message: "Brisanje nije uspjelo." 
+    };
   }
 }
